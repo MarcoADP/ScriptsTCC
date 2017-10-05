@@ -12,7 +12,7 @@ import os, os.path
 db = '70'
 LBPNeighbors = 8
 LBPRadius = 2
-classes = 8
+classes = 5
 n_conj = 3
 audio_classe = 50;
 
@@ -30,18 +30,21 @@ print(os.listdir(DIR))
 print (size_files)
 
 conjuntos = ["" for x in range(n_conj+1)]
-
+c_atual = [0 for x in range(classes+1)]
 
 for i in range(1, size_files):
-    classe = ((i-1) // audio_classe);
-    conjunto = ((i-audio_classe*classe-1) % n_conj)+1;
-    print(str(i) + " -> " + str(classe+1) + " -- " + str(conjunto));
+    classe = ((i-1) % 5) + 1
+
+    conjunto = (c_atual[classe] % 3) + 1
+    c_atual[classe] = c_atual[classe] + 1
+
+    print(str(i) + " -> " + str(classe) + " -- " + str(conjunto));
     filename = DIR + str(i) + ".txt";
     text = open(filename, 'r');
     valores = text.read();
-    conjuntos[conjunto] = conjuntos[conjunto] + str(classe+1) + " " + str(valores);
-    if(i < size_files - 2):
-        conjuntos[conjunto] = conjuntos[conjunto]  + '\n'
+    conjuntos[conjunto] = conjuntos[conjunto] + str(classe) + " " + str(valores);
+    if(i < size_files-2):
+        conjuntos[conjunto] = conjuntos[conjunto] + '\n'
 
 
 for i in range(1, n_conj+1):
