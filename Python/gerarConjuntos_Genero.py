@@ -9,10 +9,10 @@ import os, os.path
 #301 a 350 - C7
 #351 a 400 - C8
 
-db = '70'
+db = '60'
 LBPNeighbors = 8
 LBPRadius = 2
-classes = 2
+n_classes = 2
 n_conj = 3
 audio_classe = 50;
 
@@ -30,7 +30,8 @@ print(os.listdir(DIR))
 print (size_files)
 
 conjuntos = ["" for x in range(n_conj+1)]
-c_atual = [0 for x in range(classes+1)]
+classes = ["" for x in range(n_conj+1)]
+c_atual = [0 for x in range(n_classes+1)]
 
 for i in range(1, size_files):
     classe = ((i-1) // 50);
@@ -43,13 +44,23 @@ for i in range(1, size_files):
     filename = DIR + str(i) + ".txt";
     text = open(filename, 'r');
     valores = text.read();
-    conjuntos[conjunto] = conjuntos[conjunto] + str(classe) + " " + str(valores);
+    #conjuntos[conjunto] = conjuntos[conjunto] + str(classe) + " " + str(valores);
+    conjuntos[conjunto] = conjuntos[conjunto] + str(valores);
+    classes[conjunto] = classes[conjunto] + str(classe)
     if(i < size_files-2):
         conjuntos[conjunto] = conjuntos[conjunto] + '\n'
+        classes[conjunto] = classes[conjunto] + '\n'
 
 
 for i in range(1, n_conj+1):
+    f_classe_out = "resposta_" + str(i) + ".txt";
     filename_out = str(i) + ".txt";
+
     file_out = open(DIR_OUT + filename_out, 'w')
+    file_classe_out = open(DIR_OUT + f_classe_out, 'w')
+
     file_out.write(conjuntos[i]);
+    file_classe_out.write(classes[i])
+
     file_out.close();
+    file_classe_out.close();
