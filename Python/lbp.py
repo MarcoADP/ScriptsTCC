@@ -4,7 +4,7 @@ import scipy
 import os, os.path
 import cv2
 
-db = '60'
+db = '80'
 LBPNeighbors = 8
 LBPRadius = 2
 
