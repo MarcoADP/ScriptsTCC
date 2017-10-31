@@ -12,7 +12,10 @@ import os, os.path
 db = '60'
 LBPNeighbors = 8
 LBPRadius = 2
-n_classes = 2
+
+n_classes = 8
+n_audios = 5
+n_pessoas = 10
 n_conj = 3
 audio_classe = 50;
 
@@ -26,30 +29,42 @@ if not os.path.exists(DIR_OUT):
     os.makedirs(DIR_OUT)
 
 size_files = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
-print(os.listdir(DIR))
-print (size_files)
 
 conjuntos = ["" for x in range(n_conj+1)]
 classes = ["" for x in range(n_conj+1)]
-c_atual = [0 for x in range(n_classes+1)]
 
-for i in range(1, size_files):
-    classe = ((i-1) // 50);
-    classe = (classe % 2)+1
+filename_out = ["" for x in range(n_conj+1)]
+file_out = ["" for x in range(n_conj+1)]
 
-    conjunto = (c_atual[classe] % 3) + 1
-    c_atual[classe] = c_atual[classe] + 1
 
-    print(str(i) + " -> " + str(classe) + " -- " + str(conjunto));
-    filename = DIR + str(i) + ".txt";
-    text = open(filename, 'r');
-    valores = text.read();
-    #conjuntos[conjunto] = conjuntos[conjunto] + str(classe) + " " + str(valores);
-    conjuntos[conjunto] = conjuntos[conjunto] + str(valores);
-    classes[conjunto] = classes[conjunto] + str(classe)
-    if(i < size_files-2):
-        conjuntos[conjunto] = conjuntos[conjunto] + '\n'
-        classes[conjunto] = classes[conjunto] + '\n'
+
+
+for c in range(0, n_classes):
+    cj = (c+1) % 3;
+    if(cj == 0):
+        cj = 3
+
+    caux = c % 2
+
+    for m in range(1, n_audios+1):
+        for p in range(0, n_pessoas):
+            pos = caux * audio_classe + p * n_audios + m
+            filename = DIR + str(pos) + ".txt";
+            text = open(filename, 'r');
+            valores = text.read();
+
+            if(conjuntos[cj] != ""):
+                conjuntos[cj] = conjuntos[cj] + '\n'
+                classes[cj] = classes[cj] + '\n'
+
+            print(str(pos) + " -> " + str(caux) + " -- " + str(cj));
+            conjuntos[cj] = conjuntos[cj] + str(valores)
+            classes[cj] = classes[cj] + str(caux)
+
+
+            cj = cj + 1;
+            if(cj > 3):
+                cj = 1
 
 
 for i in range(1, n_conj+1):
